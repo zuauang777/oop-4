@@ -1,0 +1,213 @@
+=========== Частина 1. Демонстрація операторів ===========
+
+Піч створена конструктором за замовчуванням:
+---------------- STATE ----------------
+Power       : OFF
+Mode        : MICROWAVE
+MicroPower  : 800 W
+Timer       : 0 min 0 s
+Emitter     : OFF
+Heater      : OFF
+Resume Emit : NO
+Resume Heat : NO
+Door        : CLOSED
+---------------------------------------
+
+Oven = true;   (вмикання живлення)
+---------------- STATE ----------------
+Power       : ON
+Mode        : MICROWAVE
+MicroPower  : 800 W
+Timer       : 0 min 0 s
+Emitter     : OFF
+Heater      : OFF
+Resume Emit : NO
+Resume Heat : NO
+Door        : CLOSED
+---------------------------------------
+
+Oven <<= 320;  -> OK
+Oven <<= 500;  -> REJECTED  (500 Вт немає у ряді 160/320/640/800)
+Oven ^= 120;   -> OK
+Oven ^= 5;     -> REJECTED  (менше 10 с)
+Oven ^= 4000;  -> REJECTED  (більше 60 хв)
+---------------- STATE ----------------
+Power       : ON
+Mode        : MICROWAVE
+MicroPower  : 320 W
+Timer       : 2 min 0 s
+Emitter     : OFF
+Heater      : OFF
+Resume Emit : NO
+Resume Heat : NO
+Door        : CLOSED
+---------------------------------------
+
+Запуск розігріву (метод StartHeating):
+StartHeating() -> OK
+---------------- STATE ----------------
+Power       : ON
+Mode        : MICROWAVE
+MicroPower  : 320 W
+Timer       : 2 min 0 s
+Emitter     : ON
+Heater      : OFF
+Resume Emit : NO
+Resume Heat : NO
+Door        : CLOSED
+---------------------------------------
+
+Спроба змінити потужність під час роботи випромінювача:
+Oven <<= 160;  -> REJECTED
+
+Останній крок: вимикання живлення оператором Oven = false;
+---------------- STATE ----------------
+Power       : OFF
+Mode        : MICROWAVE
+MicroPower  : 320 W
+Timer       : 2 min 0 s
+Emitter     : OFF
+Heater      : OFF
+Resume Emit : NO
+Resume Heat : NO
+Door        : CLOSED
+---------------------------------------
+
+Перевірка вимкненої печі (оператори не діють):
+Oven <<= 640;  -> REJECTED
+Oven ^= 60;    -> REJECTED
+
+Об'єкт для частини 2 створено конструктором з трьома параметрами:
+---------------- STATE ----------------
+Power       : ON
+Mode        : GRILL
+MicroPower  : 320 W
+Timer       : 1 min 0 s
+Emitter     : OFF
+Heater      : OFF
+Resume Emit : NO
+Resume Heat : NO
+Door        : CLOSED
+---------------------------------------
+
+=========== Частина 2. Керування піччю (команди з файлу input.txt) ===========
+
+> 1   (Oven = true)
+---------------- STATE ----------------
+Power       : ON
+Mode        : MICROWAVE
+MicroPower  : 800 W
+Timer       : 0 min 0 s
+Emitter     : OFF
+Heater      : OFF
+Resume Emit : NO
+Resume Heat : NO
+Door        : CLOSED
+---------------------------------------
+
+> 2 1   SelectMode -> OK
+---------------- STATE ----------------
+Power       : ON
+Mode        : GRILL
+MicroPower  : 800 W
+Timer       : 0 min 0 s
+Emitter     : OFF
+Heater      : OFF
+Resume Emit : NO
+Resume Heat : NO
+Door        : CLOSED
+---------------------------------------
+
+> 3 320   (Oven <<= 320) -> OK
+---------------- STATE ----------------
+Power       : ON
+Mode        : GRILL
+MicroPower  : 320 W
+Timer       : 0 min 0 s
+Emitter     : OFF
+Heater      : OFF
+Resume Emit : NO
+Resume Heat : NO
+Door        : CLOSED
+---------------------------------------
+
+> 4 90   (Oven ^= 90) -> OK
+---------------- STATE ----------------
+Power       : ON
+Mode        : GRILL
+MicroPower  : 320 W
+Timer       : 1 min 30 s
+Emitter     : OFF
+Heater      : OFF
+Resume Emit : NO
+Resume Heat : NO
+Door        : CLOSED
+---------------------------------------
+
+> 5   StartHeating -> OK
+---------------- STATE ----------------
+Power       : ON
+Mode        : GRILL
+MicroPower  : 320 W
+Timer       : 1 min 30 s
+Emitter     : OFF
+Heater      : ON
+Resume Emit : NO
+Resume Heat : NO
+Door        : CLOSED
+---------------------------------------
+
+> 6   Door opened
+---------------- STATE ----------------
+Power       : ON
+Mode        : GRILL
+MicroPower  : 320 W
+Timer       : 1 min 30 s
+Emitter     : OFF
+Heater      : OFF
+Resume Emit : NO
+Resume Heat : YES
+Door        : OPEN
+---------------------------------------
+
+> 7   Door closed
+---------------- STATE ----------------
+Power       : ON
+Mode        : GRILL
+MicroPower  : 320 W
+Timer       : 1 min 30 s
+Emitter     : OFF
+Heater      : ON
+Resume Emit : NO
+Resume Heat : NO
+Door        : CLOSED
+---------------------------------------
+
+> 8   FinishHeating -> energy used: 0.025 kWh
+---------------- STATE ----------------
+Power       : ON
+Mode        : GRILL
+MicroPower  : 320 W
+Timer       : 0 min 0 s
+Emitter     : OFF
+Heater      : OFF
+Resume Emit : NO
+Resume Heat : NO
+Door        : CLOSED
+---------------------------------------
+
+> 0   (Oven = false)
+---------------- STATE ----------------
+Power       : OFF
+Mode        : GRILL
+MicroPower  : 320 W
+Timer       : 0 min 0 s
+Emitter     : OFF
+Heater      : OFF
+Resume Emit : NO
+Resume Heat : NO
+Door        : CLOSED
+---------------------------------------
+
+> e
+Роботу завершено. Результати збережено у файлі output.txt
